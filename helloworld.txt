@@ -1,0 +1,26 @@
+print("Mahatana")
+b = type(4)
+a = type("akondro")
+print(b)
+print(type(int("55")))
+print()
+answer = 43 + 56 / 14 - 9 * 2
+print(answer)
+
+# c = input()
+# print(type(c))
+
+print(5+6)
+
+d = 'anana'
+print(type(d))
+print(d)
+
+# print(d+5) # Error: can only concatenate str (not "int") to str
+
+print (d + 'k')
+print ("akondro" + 'k')
+
+nstr = "abc" * 10
+print(len(nstr))
+print(nstr)

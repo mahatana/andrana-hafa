@@ -1,0 +1,47 @@
+import pandas as pd
+import requests
+import json
+import folium
+import os
+
+os.chdir([YOUR FILEPATH HERE])
+data = pd.read_csv("Water_Main_Breaks.csv")
+data.head()
+
+response = requests.get("https://services6.arcgis.com/bdPqSfflsdgFRVVM/arcgis/rest/services/Water_Main_Breaks/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json")
+response.status_code
+
+data2 = response.json()
+print(str(data2)[:1000])
+
+data2 = pd.io.json.json_normalize(data2["features"])
+
+
+data2.rename(columns={
+    'attributes.FID': 'FID',
+    'attributes.TNT_NAME': 'TNT_NAME',
+    'attributes.date': 'date',
+    'attributes.fullDate': 'fullDate',
+    'attributes.lat': 'lat',
+    'attributes.leakClasss': 'leakClass',
+    'attributes.location': 'location',
+    'attributes.lon': 'lon',
+    'attributes.month': 'month',
+    'attributes.week': 'week',
+    'attributes.weekday': 'weekday',
+    'attributes.year': 'year',
+    'geometry.x': 'x',
+    'geometry.y': 'y'}, inplace=True)
+data2.head()
+
+breaks_map = folium.Map(location=[43.0493, -76.1455], zoom_start=12)
+breaks_map
+
+for index, row in data2.iterrows():
+  folium.features.CircleMarker([row["lat"],
+  row["lon"]], radius=7, fill_color="blue",
+  fill_opacity=0.3,
+  popup="Location: " +
+  str(row['location'])).add_to(breaks_map)
+
+breaks_map
